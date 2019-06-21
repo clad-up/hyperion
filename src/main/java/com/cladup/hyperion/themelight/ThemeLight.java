@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -20,5 +21,15 @@ public class ThemeLight {
     @Id
     @GeneratedValue
     private long id;
+    private String type;
+    private String name;
+    private boolean castShadow;
+    private float angle;
+    private String color;
+    private float distance;
+    private float intensity;
+    private float spotPenumbra;
+    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 
 }
