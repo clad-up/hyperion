@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -23,23 +24,23 @@ public class ThemeObject {
     private String name;
     private String type;
     @Column(name = "position_x")
-    private float positionX;
+    private BigDecimal positionX;
     @Column(name = "position_y")
-    private float positionY;
+    private BigDecimal positionY;
     @Column(name = "position_z")
-    private float positionZ;
+    private BigDecimal positionZ;
     @Column(name = "rotation_x")
-    private float rotationX;
+    private BigDecimal rotationX;
     @Column(name = "rotation_y")
-    private float rotationY;
+    private BigDecimal rotationY;
     @Column(name = "rotation_z")
-    private float rotationZ;
+    private BigDecimal rotationZ;
     @Column(name = "scale_x")
-    private float scaleX;
+    private BigDecimal scaleX;
     @Column(name = "scale_y")
-    private float scaleY;
+    private BigDecimal scaleY;
     @Column(name = "scale_z")
-    private float scaleZ;
+    private BigDecimal scaleZ;
     private String companyProductId;
     private String companyProductName;
     private String companyProductImageUrl;

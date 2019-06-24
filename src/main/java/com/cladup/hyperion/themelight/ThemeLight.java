@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -26,11 +27,11 @@ public class ThemeLight {
     private String type;
     private String name;
     private boolean castShadow;
-    private float angle;
+    private BigDecimal angle;
     private String color;
-    private float distance;
-    private float intensity;
-    private float spotPenumbra;
+    private BigDecimal distance;
+    private BigDecimal intensity;
+    private BigDecimal spotPenumbra;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     @CreationTimestamp

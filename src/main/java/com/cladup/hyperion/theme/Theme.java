@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,38 +21,56 @@ public class Theme {
     @Id
     @GeneratedValue
     private long id;
+    @Column(nullable = false)
     private String name;
-    private String description;
-    @Column(name = "camera_position_x")
-    private float cameraPositionX;
-    @Column(name = "camera_position_y")
-    private float cameraPositionY;
-    @Column(name = "camera_position_z")
-    private float cameraPositionZ;
-    @Column(name = "camera_rotation_x")
-    private float cameraRotationX;
-    @Column(name = "camera_rotation_y")
-    private float cameraRotationY;
-    @Column(name = "camera_rotation_z")
-    private float cameraRotationZ;
-    @Column(name = "position_x")
-    private float positionX;
-    @Column(name = "position_y")
-    private float positionY;
-    @Column(name = "position_z")
-    private float positionZ;
-    @Column(name = "rotation_x")
-    private float rotationX;
-    @Column(name = "rotation_y")
-    private float rotationY;
-    @Column(name = "rotation_z")
-    private float rotationZ;
-    @Column(name = "scale_x")
-    private float scaleX;
-    @Column(name = "scale_y")
-    private float scaleY;
-    @Column(name = "scale_z")
-    private float scaleZ;
+    @Lob
+    @Column(nullable = false)
+    private String description = "";
+    @Column(name = "camera_position_x", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal cameraPositionX;
+    @Column(name = "camera_position_y", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal cameraPositionY;
+    @Column(name = "camera_position_z", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal cameraPositionZ;
+    @Column(name = "camera_rotation_x", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal cameraRotationX;
+    @Column(name = "camera_rotation_y", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal cameraRotationY;
+    @Column(name = "camera_rotation_z", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal cameraRotationZ;
+    @Column(name = "position_x", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal positionX;
+    @Column(name = "position_y", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal positionY;
+    @Column(name = "position_z", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal positionZ;
+    @Column(name = "rotation_x", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal rotationX;
+    @Column(name = "rotation_y", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal rotationY;
+    @Column(name = "rotation_z", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal rotationZ;
+    @Column(name = "scale_x", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal scaleX;
+    @Column(name = "scale_y", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal scaleY;
+    @Column(name = "scale_z", nullable = false,
+            precision = 5, scale = 3)
+    private BigDecimal scaleZ;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     @CreationTimestamp
