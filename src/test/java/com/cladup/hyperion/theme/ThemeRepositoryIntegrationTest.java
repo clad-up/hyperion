@@ -35,6 +35,9 @@ public class ThemeRepositoryIntegrationTest {
         Assert.assertEquals(newTheme.getId(), createdTheme.get().getId());
     }
 
+    /**
+     * Should find all themes in database.
+     */
     @Test
     public void testShouldFindAll() {
         // Given
