@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,7 +38,9 @@ public class ThemeObject {
     private String companyProductName;
     private String companyProductImageUrl;
     private String companyProductTargetUrl;
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
 }

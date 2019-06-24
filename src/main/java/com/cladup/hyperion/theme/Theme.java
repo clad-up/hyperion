@@ -3,6 +3,8 @@ package com.cladup.hyperion.theme;
 import com.cladup.hyperion.themelight.ThemeLight;
 import com.cladup.hyperion.themeobject.ThemeObject;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,7 +37,9 @@ public class Theme {
     private float scaleX;
     private float scaleY;
     private float scaleZ;
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
