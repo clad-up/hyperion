@@ -21,25 +21,36 @@ public class ThemeObject {
     @Id
     @GeneratedValue
     private long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String type;
-    @Column(name = "position_x")
+    @Column(name = "position_x", nullable = false,
+            precision = 5, scale = 3)
     private BigDecimal positionX;
-    @Column(name = "position_y")
+    @Column(name = "position_y", nullable = false,
+            precision = 5, scale = 3)
     private BigDecimal positionY;
-    @Column(name = "position_z")
+    @Column(name = "position_z", nullable = false,
+            precision = 5, scale = 3)
     private BigDecimal positionZ;
-    @Column(name = "rotation_x")
+    @Column(name = "rotation_x", nullable = false,
+            precision = 5, scale = 3)
     private BigDecimal rotationX;
-    @Column(name = "rotation_y")
+    @Column(name = "rotation_y", nullable = false,
+            precision = 5, scale = 3)
     private BigDecimal rotationY;
-    @Column(name = "rotation_z")
+    @Column(name = "rotation_z", nullable = false,
+            precision = 5, scale = 3)
     private BigDecimal rotationZ;
-    @Column(name = "scale_x")
+    @Column(name = "scale_x", nullable = false,
+            precision = 5, scale = 3)
     private BigDecimal scaleX;
-    @Column(name = "scale_y")
+    @Column(name = "scale_y", nullable = false,
+            precision = 5, scale = 3)
     private BigDecimal scaleY;
-    @Column(name = "scale_z")
+    @Column(name = "scale_z", nullable = false,
+            precision = 5, scale = 3)
     private BigDecimal scaleZ;
     private String companyProductId;
     private String companyProductName;
