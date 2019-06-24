@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -25,14 +22,23 @@ public class ThemeObject {
     private long id;
     private String name;
     private String type;
+    @Column(name = "position_x")
     private float positionX;
+    @Column(name = "position_y")
     private float positionY;
+    @Column(name = "position_z")
     private float positionZ;
+    @Column(name = "rotation_x")
     private float rotationX;
+    @Column(name = "rotation_y")
     private float rotationY;
+    @Column(name = "rotation_z")
     private float rotationZ;
+    @Column(name = "scale_x")
     private float scaleX;
+    @Column(name = "scale_y")
     private float scaleY;
+    @Column(name = "scale_z")
     private float scaleZ;
     private String companyProductId;
     private String companyProductName;
