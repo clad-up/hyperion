@@ -1,5 +1,7 @@
 package com.cladup.hyperion.theme;
 
+import com.cladup.hyperion.themelight.ThemeLight;
+import com.cladup.hyperion.themeobject.ThemeObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -25,6 +28,8 @@ public class ThemeRepositoryIntegrationTest {
     private ThemeRepository themeRepository;
 
     private Theme newTheme;
+    private ThemeLight newLight;
+    private ThemeObject newObject;
 
     @Before
     public void setup() {
@@ -47,6 +52,34 @@ public class ThemeRepositoryIntegrationTest {
                 .scaleX(defaultDecimalValue)
                 .scaleY(defaultDecimalValue)
                 .scaleZ(defaultDecimalValue)
+                .build();
+        newLight = ThemeLight.builder()
+                .type("commerce")
+                .name("Commerce Light")
+                .castShadow(true)
+                .angle(90)
+                .color("FFFFFF")
+                .distance(new BigDecimal("99.999"))
+                .intensity(new BigDecimal("99.999"))
+                .spotPenumbra(new BigDecimal("99.9"))
+                .build();
+        BigDecimal graphicValue = new BigDecimal("99.999");
+        newObject = ThemeObject.builder()
+                .name("Time Stone")
+                .type("product")
+                .positionX(graphicValue)
+                .positionY(graphicValue)
+                .positionZ(graphicValue)
+                .rotationX(graphicValue)
+                .rotationY(graphicValue)
+                .rotationZ(graphicValue)
+                .scaleX(graphicValue)
+                .scaleY(graphicValue)
+                .scaleZ(graphicValue)
+                .companyProductId("1")
+                .companyProductName("Endgame Infinity Stone")
+                .companyProductImageUrl("Image Url")
+                .companyProductTargetUrl("Target Url")
                 .build();
     }
 
@@ -270,6 +303,173 @@ public class ThemeRepositoryIntegrationTest {
         // Then
         Assert.assertNotEquals(updatedTheme.getUpdatedAt(), lastUpdatedAt);
         Assert.assertEquals(updatedTheme.getCreatedAt(), lastCreatedAt);
+    }
+
+    /**
+     * Should create a ThemeLight entity with Theme association
+     */
+    @Test
+    public void testShouldCreateThemeLight() {
+        // Given
+        // newLight
+        // When
+        newTheme.setThemeLights(List.of(newLight));
+        Theme savedThemeWithLights = testEntityManager.persistFlushFind(newTheme);
+        // Then
+        ThemeLight newLight = savedThemeWithLights.getThemeLights().get(0);
+        Assert.assertEquals("commerce", newLight.getType());
+        Assert.assertEquals("Commerce Light", newLight.getName());
+        Assert.assertTrue(newLight.isCastShadow());
+        Assert.assertEquals(90, newLight.getAngle());
+        Assert.assertEquals("FFFFFF", newLight.getColor());
+        Assert.assertEquals(new BigDecimal("99.999"), newLight.getDistance());
+        Assert.assertEquals(new BigDecimal("99.999"), newLight.getIntensity());
+        Assert.assertEquals(new BigDecimal("99.9"), newLight.getSpotPenumbra());
+    }
+
+    /**
+     * Should not persist light when type is null
+     */
+    @Test(expected = PersistenceException.class)
+    public void testShouldLightTypeNotNull() {
+        // Given
+        // newLight
+        // When
+        newLight.setType(null);
+        newTheme.setThemeLights(List.of(newLight));
+        testEntityManager.persistAndFlush(this.newTheme);
+        // Then
+        // Throws PersistenceException
+    }
+
+    /**
+     * Should not persist light when name is null
+     */
+    @Test(expected = PersistenceException.class)
+    public void testShouldLightNameNotNull() {
+        // Given
+        // newLight
+        // When
+        newLight.setName(null);
+        newTheme.setThemeLights(List.of(newLight));
+        testEntityManager.persistAndFlush(this.newTheme);
+        // Then
+        // Throws PersistenceException
+    }
+
+    /**
+     * Should not persist when angle value
+     * is under 0
+     */
+    @Test(expected = ConstraintViolationException.class)
+    public void testShouldNotCreateLightAngleUnder0() {
+        // Given
+        // newLight
+        // When
+        newLight.setAngle(-1);
+        newTheme.setThemeLights(List.of(newLight));
+        testEntityManager.persistAndFlush(this.newTheme);
+        // Then
+        // Throws ConstraintViolationException
+    }
+
+    /**
+     * Should not persist when angle value
+     * is over 360
+     */
+    @Test(expected = ConstraintViolationException.class)
+    public void testShouldNotCreateLightAngleOver360() {
+        // Given
+        // newLight
+        // When
+        newLight.setAngle(361);
+        newTheme.setThemeLights(List.of(newLight));
+        testEntityManager.persistAndFlush(this.newTheme);
+        // Then
+        // Throws ConstraintViolationException
+    }
+
+    /**
+     * Should not persist when
+     * Light Fields: `distance`, `intensity`, `spotPenumbra`
+     * are null (even one of them)
+     */
+    @Test(expected = PersistenceException.class)
+    public void testShouldLightFieldsNotNull() {
+        // Given
+        // newLight
+        // When
+        newLight.setDistance(null);
+        newLight.setIntensity(null);
+        newLight.setSpotPenumbra(null);
+        newTheme.setThemeLights(List.of(newLight));
+        testEntityManager.persistAndFlush(this.newTheme);
+        // Then
+        // Throws PersistenceException
+    }
+
+    /**
+     * Should persist with following precision and scale
+     * `distance`, `intensity`: precision 5, scale 3
+     * `spotPenumbra`: precision 3, scale 1
+     */
+    @Test
+    public void testShouldLightFieldsPrecisionAndScaleSet() {
+        // Given
+        // newLight
+        // When
+        newTheme.setThemeLights(List.of(newLight));
+        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        ThemeLight savedLight = savedTheme.getThemeLights().get(0);
+        // Then
+        Assert.assertEquals(5, savedLight.getDistance().precision());
+        Assert.assertEquals(3, savedLight.getDistance().scale());
+        Assert.assertEquals(5, savedLight.getIntensity().precision());
+        Assert.assertEquals(3, savedLight.getIntensity().scale());
+        Assert.assertEquals(3, savedLight.getSpotPenumbra().precision());
+        Assert.assertEquals(1, savedLight.getSpotPenumbra().scale());
+    }
+
+    /**
+     * All dates must not be null
+     */
+    @Test
+    public void testShouldLightDatesNotNull() {
+        // Given
+        // newLight
+        // When
+        newTheme.setThemeLights(List.of(newLight));
+        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        ThemeLight savedLight = savedTheme.getThemeLights().get(0);
+        // Then
+        Assert.assertNotNull(savedLight.getUpdatedAt());
+        Assert.assertNotNull(savedLight.getCreatedAt());
+    }
+
+    /**
+     * `updatedAt` should update when record is updated
+     */
+    @Test
+    public void testShouldLightUpdateUpdatedAtWhenUpdate() {
+        // Given
+        // newLight
+        // When
+        // Create theme
+        this.newTheme.setThemeLights(List.of(this.newLight));
+        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        ThemeLight savedLight = savedTheme.getThemeLights().get(0);
+        LocalDateTime lastUpdatedAt = savedLight.getUpdatedAt();
+        LocalDateTime lastCreatedAt = savedLight.getCreatedAt();
+        // Update theme
+        Theme updatingTheme = testEntityManager.find(Theme.class, savedTheme.getId());
+        ThemeLight updatingLight = updatingTheme.getThemeLights().get(0);
+        updatingLight.setAngle(7);
+        updatingTheme.getThemeLights().clear();
+        updatingTheme.getThemeLights().addAll(List.of(updatingLight));
+        testEntityManager.persistAndFlush(updatingTheme);
+        // Then
+        Assert.assertNotEquals(updatingLight.getUpdatedAt(), lastUpdatedAt);
+        Assert.assertEquals(updatingLight.getCreatedAt(), lastCreatedAt);
     }
 
 }
