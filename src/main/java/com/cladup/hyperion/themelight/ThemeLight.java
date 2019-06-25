@@ -8,6 +8,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -27,11 +30,11 @@ public class ThemeLight {
     private String name;
     @Column(nullable = false)
     private boolean castShadow;
-    @Column(nullable = false,
-            precision = 5, scale = 3)
-    private BigDecimal angle;
-    @Column(nullable = false,
-            precision = 5, scale = 3)
+    @Min(0)
+    @Max(360)
+    @Column(nullable = false)
+    private int angle;
+    @Column(nullable = false, length = 6)
     private String color;
     @Column(nullable = false,
             precision = 5, scale = 3)
@@ -40,7 +43,7 @@ public class ThemeLight {
             precision = 5, scale = 3)
     private BigDecimal intensity;
     @Column(nullable = false,
-            precision = 5, scale = 3)
+            precision = 3, scale = 1)
     private BigDecimal spotPenumbra;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
