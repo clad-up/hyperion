@@ -472,4 +472,161 @@ public class ThemeRepositoryIntegrationTest {
         Assert.assertEquals(updatingLight.getCreatedAt(), lastCreatedAt);
     }
 
+    /**
+     * Should create a ThemeObject entity with Theme association
+     */
+    @Test
+    public void testShouldCreateThemeObject() {
+        // Given
+        // newObject
+        // When
+        newTheme.setThemeObjects(List.of(newObject));
+        Theme savedThemeWithLights = testEntityManager.persistFlushFind(newTheme);
+        // Then
+        ThemeObject newThemeObject = savedThemeWithLights.getThemeObjects().get(0);
+        Assert.assertEquals("Time Stone", newThemeObject.getName());
+        Assert.assertEquals("product", newThemeObject.getType());
+        Assert.assertEquals(new BigDecimal("99.999"), newThemeObject.getPositionX());
+        Assert.assertEquals(new BigDecimal("99.999"), newThemeObject.getPositionY());
+        Assert.assertEquals(new BigDecimal("99.999"), newThemeObject.getPositionZ());
+        Assert.assertEquals(new BigDecimal("99.999"), newThemeObject.getRotationX());
+        Assert.assertEquals(new BigDecimal("99.999"), newThemeObject.getRotationY());
+        Assert.assertEquals(new BigDecimal("99.999"), newThemeObject.getRotationZ());
+        Assert.assertEquals(new BigDecimal("99.999"), newThemeObject.getScaleX());
+        Assert.assertEquals(new BigDecimal("99.999"), newThemeObject.getScaleY());
+        Assert.assertEquals(new BigDecimal("99.999"), newThemeObject.getScaleZ());
+        Assert.assertEquals("1", newThemeObject.getCompanyProductId());
+        Assert.assertEquals("Endgame Infinity Stone", newThemeObject.getCompanyProductName());
+        Assert.assertEquals("Image Url", newThemeObject.getCompanyProductImageUrl());
+        Assert.assertEquals("Target Url", newThemeObject.getCompanyProductTargetUrl());
+    }
+
+    /**
+     * Should not persist when ThemeObject type is null
+     */
+    @Test(expected = PersistenceException.class)
+    public void testShouldObjectTypeNotNull() {
+        // Given
+        // newObject
+        // When
+        newObject.setType(null);
+        newTheme.setThemeObjects(List.of(newObject));
+        testEntityManager.persistAndFlush(newTheme);
+        // Then
+        // Throws PersistenceException
+    }
+
+    /**
+     * Should not persist when ThemeObject name is null
+     */
+    @Test(expected = PersistenceException.class)
+    public void testShouldObjectNameNotNull() {
+        // Given
+        // newObject
+        // When
+        newObject.setName(null);
+        newTheme.setThemeObjects(List.of(newObject));
+        testEntityManager.persistAndFlush(newTheme);
+        // Then
+        // Throws PersistenceException
+    }
+
+    /**
+     * Should not persist when any of
+     * `position{X,Y,Z}`, `rotation{X,Y,Z}`, `scale{X,Y,Z}` is null
+     */
+    @Test(expected = PersistenceException.class)
+    public void testShouldObjectGraphicFieldsNotNull() {
+        // Given
+        // newObject
+        // When
+        newObject.setPositionX(null);
+        newObject.setPositionY(null);
+        newObject.setPositionZ(null);
+        newObject.setRotationX(null);
+        newObject.setRotationY(null);
+        newObject.setRotationZ(null);
+        newObject.setScaleX(null);
+        newObject.setScaleY(null);
+        newObject.setScaleZ(null);
+        newTheme.setThemeObjects(List.of(newObject));
+        testEntityManager.persistAndFlush(newTheme);
+        // Then
+        // Throws PersistenceException
+    }
+
+    /**
+     * All graphic fields should have precision of 5 and scale of 3
+     */
+    @Test
+    public void testShouldObjectGraphicFieldsPrecisionAndScaleSet() {
+        // When
+        // newObject
+        // Given
+        newTheme.setThemeObjects(List.of(newObject));
+        Theme savedThemeWithObjects = testEntityManager.persistFlushFind(newTheme);
+        // Then
+        ThemeObject newThemeObject = savedThemeWithObjects.getThemeObjects().get(0);
+        Assert.assertEquals(5, newThemeObject.getPositionX().precision());
+        Assert.assertEquals(3, newThemeObject.getPositionX().scale());
+        Assert.assertEquals(5, newThemeObject.getPositionY().precision());
+        Assert.assertEquals(3, newThemeObject.getPositionY().scale());
+        Assert.assertEquals(5, newThemeObject.getPositionZ().precision());
+        Assert.assertEquals(3, newThemeObject.getPositionZ().scale());
+        Assert.assertEquals(5, newThemeObject.getRotationX().precision());
+        Assert.assertEquals(3, newThemeObject.getRotationX().scale());
+        Assert.assertEquals(5, newThemeObject.getRotationY().precision());
+        Assert.assertEquals(3, newThemeObject.getRotationY().scale());
+        Assert.assertEquals(5, newThemeObject.getRotationZ().precision());
+        Assert.assertEquals(3, newThemeObject.getRotationZ().scale());
+        Assert.assertEquals(5, newThemeObject.getScaleX().precision());
+        Assert.assertEquals(3, newThemeObject.getScaleX().scale());
+        Assert.assertEquals(5, newThemeObject.getScaleY().precision());
+        Assert.assertEquals(3, newThemeObject.getScaleY().scale());
+        Assert.assertEquals(5, newThemeObject.getScaleZ().precision());
+        Assert.assertEquals(3, newThemeObject.getScaleZ().scale());
+    }
+
+    /**
+     * All dates must not be null
+     */
+    @Test
+    public void testShouldObjectDatesNotNull() {
+        // Given
+        // newObject
+        // When
+        newTheme.setThemeObjects(List.of(newObject));
+        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        ThemeObject savedObject = savedTheme.getThemeObjects().get(0);
+        // Then
+        Assert.assertNotNull(savedObject.getUpdatedAt());
+        Assert.assertNotNull(savedObject.getCreatedAt());
+    }
+
+    /**
+     * `updatedAt` should update when record is updated
+     */
+    @Test
+    public void testShouldObjectUpdateUpdatedAtWhenUpdate() {
+        // Given
+        // newObject
+        // When
+        // Create theme
+        this.newTheme.setThemeObjects(List.of(this.newObject));
+        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        ThemeObject savedObject = savedTheme.getThemeObjects().get(0);
+        LocalDateTime lastUpdatedAt = savedObject.getUpdatedAt();
+        LocalDateTime lastCreatedAt = savedObject.getCreatedAt();
+        // Update theme
+        Theme updatingTheme = testEntityManager.find(Theme.class, savedTheme.getId());
+        ThemeObject updatingObject = updatingTheme.getThemeObjects().get(0);
+        updatingObject.setName("Reality Stone");
+        updatingTheme.getThemeObjects().clear();
+        updatingTheme.getThemeObjects().addAll(List.of(updatingObject));
+        testEntityManager.persistAndFlush(updatingTheme);
+        // Then
+        Assert.assertNotEquals(updatingObject.getUpdatedAt(), lastUpdatedAt);
+        Assert.assertEquals(updatingObject.getCreatedAt(), lastCreatedAt);
+    }
+
 }
