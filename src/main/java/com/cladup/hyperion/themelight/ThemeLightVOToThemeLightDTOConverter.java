@@ -5,15 +5,12 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * Converts `ThemeLight` entity to `ThemeLightVO` value object
- */
 @Component
-public class ThemeLightToThemeLightVOConverter implements Converter<ThemeLight, ThemeLightVO> {
+public class ThemeLightVOToThemeLightDTOConverter implements Converter<ThemeLightVO, ThemeLightDTO> {
 
     @Override
-    public @NotNull ThemeLightVO convert(@NotNull ThemeLight source) {
-        return ThemeLightVO.builder()
+    public @NotNull ThemeLightDTO convert(@NotNull ThemeLightVO source) {
+        return ThemeLightDTO.builder()
                 .id(source.getId())
                 .type(source.getType())
                 .name(source.getName())

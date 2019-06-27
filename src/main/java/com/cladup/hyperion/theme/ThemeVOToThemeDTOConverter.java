@@ -1,7 +1,7 @@
 package com.cladup.hyperion.theme;
 
-import com.cladup.hyperion.themelight.ThemeLightToThemeLightVOConverter;
-import com.cladup.hyperion.themeobject.ThemeObjectToThemeObjectVOConverter;
+import com.cladup.hyperion.themelight.ThemeLightVOToThemeLightDTOConverter;
+import com.cladup.hyperion.themeobject.ThemeObjectVOToThemeObjectDTOConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -9,18 +9,15 @@ import org.springframework.stereotype.Component;
 import javax.validation.constraints.NotNull;
 import java.util.stream.Collectors;
 
-/**
- * Converts `Theme` entity to `ThemeVO` value object
- */
 @AllArgsConstructor
 @Component
-public class ThemeToThemeVOConverter implements Converter<Theme, ThemeVO> {
-    private final ThemeLightToThemeLightVOConverter themeLightToThemeLightVOConverter;
-    private final ThemeObjectToThemeObjectVOConverter themeObjectToThemeObjectVOConverter;
+public class ThemeVOToThemeDTOConverter implements Converter<ThemeVO, ThemeDTO> {
+    private final ThemeLightVOToThemeLightDTOConverter themeLightVOToThemeLightDTOConverter;
+    private final ThemeObjectVOToThemeObjectDTOConverter themeObjectVOToThemeObjectDTOConverter;
 
     @Override
-    public @NotNull ThemeVO convert(@NotNull Theme source) {
-        return ThemeVO.builder()
+    public @NotNull ThemeDTO convert(@NotNull ThemeVO source) {
+        return ThemeDTO.builder()
                 .id(source.getId())
                 .name(source.getName())
                 .description(source.getDescription())
@@ -39,13 +36,11 @@ public class ThemeToThemeVOConverter implements Converter<Theme, ThemeVO> {
                 .scaleX(source.getScaleX())
                 .scaleY(source.getScaleY())
                 .scaleZ(source.getScaleZ())
-                .themeObjects(source.getThemeObjects()
-                        .stream()
-                        .map(themeObjectToThemeObjectVOConverter::convert)
+                .themeLights(source.getThemeLights().stream()
+                        .map(themeLightVOToThemeLightDTOConverter::convert)
                         .collect(Collectors.toList()))
-                .themeLights(source.getThemeLights()
-                        .stream()
-                        .map(themeLightToThemeLightVOConverter::convert)
+                .themeObjects(source.getThemeObjects().stream()
+                        .map(themeObjectVOToThemeObjectDTOConverter::convert)
                         .collect(Collectors.toList()))
                 .build();
     }

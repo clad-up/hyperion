@@ -5,15 +5,12 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * Converts `ThemeObject` entity to `ThemeObjectVO` value object
- */
 @Component
-public class ThemeObjectToThemeObjectVOConverter implements Converter<ThemeObject, ThemeObjectVO> {
+public class ThemeObjectVOToThemeObjectDTOConverter implements Converter<ThemeObjectVO, ThemeObjectDTO> {
 
     @Override
-    public @NotNull ThemeObjectVO convert(@NotNull ThemeObject source) {
-        return ThemeObjectVO.builder()
+    public @NotNull ThemeObjectDTO convert(@NotNull ThemeObjectVO source) {
+        return ThemeObjectDTO.builder()
                 .id(source.getId())
                 .name(source.getName())
                 .type(source.getType())
