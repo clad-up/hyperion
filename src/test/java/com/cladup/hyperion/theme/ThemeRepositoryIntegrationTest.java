@@ -90,12 +90,12 @@ public class ThemeRepositoryIntegrationTest {
     @Test
     public void testShouldFindById() {
         // Given
-        Theme newTheme = testEntityManager
-                .persistFlushFind(this.newTheme);
+        Theme theme = testEntityManager
+                .persistFlushFind(newTheme);
         // When
-        Optional<Theme> createdTheme = themeRepository.findById(newTheme.getId());
+        Optional<Theme> createdTheme = themeRepository.findById(theme.getId());
         // Then
-        Assert.assertEquals(newTheme.getId(), createdTheme.get().getId());
+        Assert.assertEquals(theme.getId(), createdTheme.get().getId());
     }
 
     /**
@@ -105,7 +105,7 @@ public class ThemeRepositoryIntegrationTest {
     public void testShouldFindAll() {
         // Given
         Theme newTheme1 = testEntityManager
-                .persistFlushFind(this.newTheme);
+                .persistFlushFind(newTheme);
         BigDecimal defaultDecimalValue = new BigDecimal("98.888");
         Theme newTheme2 = testEntityManager
                 .persistFlushFind(Theme.builder()
@@ -142,7 +142,7 @@ public class ThemeRepositoryIntegrationTest {
         // Given
         // newTheme
         // When
-        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        Theme savedTheme = testEntityManager.persistFlushFind(newTheme);
         // Then
         Assert.assertTrue(savedTheme.getId() > 0);
         Assert.assertEquals("Star Wars Theme", savedTheme.getName());
@@ -175,7 +175,7 @@ public class ThemeRepositoryIntegrationTest {
         // newTheme
         // When
         newTheme.setName(null);
-        testEntityManager.persistAndFlush(this.newTheme);
+        testEntityManager.persistAndFlush(newTheme);
         // Then
         // Throws ConstraintViolationException
     }
@@ -189,7 +189,7 @@ public class ThemeRepositoryIntegrationTest {
         // newTheme
         // When
         newTheme.setDescription(null);
-        testEntityManager.persistAndFlush(this.newTheme);
+        testEntityManager.persistAndFlush(newTheme);
         // Then
         // Throws ConstraintViolationException
     }
@@ -203,7 +203,7 @@ public class ThemeRepositoryIntegrationTest {
         // Given
         // newTheme
         // When
-        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        Theme savedTheme = testEntityManager.persistFlushFind(newTheme);
         // Then
         Assert.assertEquals(3, savedTheme.getCameraPositionX().scale());
         Assert.assertEquals(5, savedTheme.getCameraPositionX().precision());
@@ -265,7 +265,7 @@ public class ThemeRepositoryIntegrationTest {
                 .scaleZ(nullDecimalValue)
                 .build();
         // When
-        testEntityManager.persistAndFlush(this.newTheme);
+        testEntityManager.persistAndFlush(newTheme);
         // Then
         // Throws ConstraintViolationException
     }
@@ -278,7 +278,7 @@ public class ThemeRepositoryIntegrationTest {
         // Given
         // newTheme
         // When
-        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        Theme savedTheme = testEntityManager.persistFlushFind(newTheme);
         // Then
         Assert.assertNotNull(savedTheme.getUpdatedAt());
         Assert.assertNotNull(savedTheme.getCreatedAt());
@@ -293,7 +293,7 @@ public class ThemeRepositoryIntegrationTest {
         // newTheme
         // When
         // Create theme
-        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        Theme savedTheme = testEntityManager.persistFlushFind(newTheme);
         LocalDateTime lastUpdatedAt = savedTheme.getUpdatedAt();
         LocalDateTime lastCreatedAt = savedTheme.getCreatedAt();
         // Update theme
@@ -337,7 +337,7 @@ public class ThemeRepositoryIntegrationTest {
         // When
         newLight.setType(null);
         newTheme.setThemeLights(List.of(newLight));
-        testEntityManager.persistAndFlush(this.newTheme);
+        testEntityManager.persistAndFlush(newTheme);
         // Then
         // Throws PersistenceException
     }
@@ -352,7 +352,7 @@ public class ThemeRepositoryIntegrationTest {
         // When
         newLight.setName(null);
         newTheme.setThemeLights(List.of(newLight));
-        testEntityManager.persistAndFlush(this.newTheme);
+        testEntityManager.persistAndFlush(newTheme);
         // Then
         // Throws PersistenceException
     }
@@ -368,7 +368,7 @@ public class ThemeRepositoryIntegrationTest {
         // When
         newLight.setAngle(-1);
         newTheme.setThemeLights(List.of(newLight));
-        testEntityManager.persistAndFlush(this.newTheme);
+        testEntityManager.persistAndFlush(newTheme);
         // Then
         // Throws ConstraintViolationException
     }
@@ -384,7 +384,7 @@ public class ThemeRepositoryIntegrationTest {
         // When
         newLight.setAngle(361);
         newTheme.setThemeLights(List.of(newLight));
-        testEntityManager.persistAndFlush(this.newTheme);
+        testEntityManager.persistAndFlush(newTheme);
         // Then
         // Throws ConstraintViolationException
     }
@@ -403,7 +403,7 @@ public class ThemeRepositoryIntegrationTest {
         newLight.setIntensity(null);
         newLight.setSpotPenumbra(null);
         newTheme.setThemeLights(List.of(newLight));
-        testEntityManager.persistAndFlush(this.newTheme);
+        testEntityManager.persistAndFlush(newTheme);
         // Then
         // Throws PersistenceException
     }
@@ -419,7 +419,7 @@ public class ThemeRepositoryIntegrationTest {
         // newLight
         // When
         newTheme.setThemeLights(List.of(newLight));
-        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        Theme savedTheme = testEntityManager.persistFlushFind(newTheme);
         ThemeLight savedLight = savedTheme.getThemeLights().get(0);
         // Then
         Assert.assertEquals(5, savedLight.getDistance().precision());
@@ -439,7 +439,7 @@ public class ThemeRepositoryIntegrationTest {
         // newLight
         // When
         newTheme.setThemeLights(List.of(newLight));
-        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        Theme savedTheme = testEntityManager.persistFlushFind(newTheme);
         ThemeLight savedLight = savedTheme.getThemeLights().get(0);
         // Then
         Assert.assertNotNull(savedLight.getUpdatedAt());
@@ -455,8 +455,8 @@ public class ThemeRepositoryIntegrationTest {
         // newLight
         // When
         // Create theme
-        this.newTheme.setThemeLights(List.of(this.newLight));
-        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        newTheme.setThemeLights(List.of(newLight));
+        Theme savedTheme = testEntityManager.persistFlushFind(newTheme);
         ThemeLight savedLight = savedTheme.getThemeLights().get(0);
         LocalDateTime lastUpdatedAt = savedLight.getUpdatedAt();
         LocalDateTime lastCreatedAt = savedLight.getCreatedAt();
@@ -596,7 +596,7 @@ public class ThemeRepositoryIntegrationTest {
         // newObject
         // When
         newTheme.setThemeObjects(List.of(newObject));
-        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        Theme savedTheme = testEntityManager.persistFlushFind(newTheme);
         ThemeObject savedObject = savedTheme.getThemeObjects().get(0);
         // Then
         Assert.assertNotNull(savedObject.getUpdatedAt());
@@ -612,8 +612,8 @@ public class ThemeRepositoryIntegrationTest {
         // newObject
         // When
         // Create theme
-        this.newTheme.setThemeObjects(List.of(this.newObject));
-        Theme savedTheme = testEntityManager.persistFlushFind(this.newTheme);
+        newTheme.setThemeObjects(List.of(newObject));
+        Theme savedTheme = testEntityManager.persistFlushFind(newTheme);
         ThemeObject savedObject = savedTheme.getThemeObjects().get(0);
         LocalDateTime lastUpdatedAt = savedObject.getUpdatedAt();
         LocalDateTime lastCreatedAt = savedObject.getCreatedAt();
