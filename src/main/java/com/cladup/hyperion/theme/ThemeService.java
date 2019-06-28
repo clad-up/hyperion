@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -103,12 +104,11 @@ public class ThemeService {
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
-        return Stream.of(themeVO)
+        return Optional.of(themeVO)
                 .map(themeToThemeVOConverter::revert)
                 .map(themeRepository::save)
                 .map(themeToThemeVOConverter::convert)
                 .map(themeVOToThemeDTOConverter::convert)
-                .findFirst()
                 .orElseThrow();
     }
 
