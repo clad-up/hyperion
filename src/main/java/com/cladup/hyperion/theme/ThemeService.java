@@ -1,7 +1,10 @@
 package com.cladup.hyperion.theme;
 
 import com.cladup.hyperion.theme.input.CreateThemeInput;
+import com.cladup.hyperion.theme.input.UpdateThemeInput;
+import com.cladup.hyperion.themelight.ThemeLight;
 import com.cladup.hyperion.themelight.ThemeLightVO;
+import com.cladup.hyperion.themeobject.ThemeObject;
 import com.cladup.hyperion.themeobject.ThemeObjectVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +13,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -25,6 +27,7 @@ public class ThemeService {
 
     /**
      * Get Theme by primary key
+     *
      * @param id Primary Key
      * @return Found Theme
      */
@@ -38,6 +41,7 @@ public class ThemeService {
     /**
      * Return all available themes
      * TODO: Pagination will be needed
+     *
      * @return Available themes
      */
     public @NotNull List<ThemeDTO> getAll() {
@@ -50,6 +54,7 @@ public class ThemeService {
 
     /**
      * Create theme
+     *
      * @param createThemeInput Input with theme properties
      * @return Persisted theme
      */
@@ -106,6 +111,72 @@ public class ThemeService {
                 .build();
         return Optional.of(themeVO)
                 .map(themeToThemeVOConverter::revert)
+                .map(themeRepository::save)
+                .map(themeToThemeVOConverter::convert)
+                .map(themeVOToThemeDTOConverter::convert)
+                .orElseThrow();
+    }
+
+    /**
+     * Update theme
+     *
+     * @param id               primary key
+     * @param updateThemeInput Input with updated theme properties
+     * @return Updated theme
+     */
+    public @NotNull ThemeDTO update(long id, @NotNull UpdateThemeInput updateThemeInput) {
+        return themeRepository.findById(id)
+                .filter(theme -> theme.getId() == updateThemeInput.getId())
+                .map(theme -> theme.toBuilder()
+                        .name(updateThemeInput.getName())
+                        .description(updateThemeInput.getDescription())
+                        .cameraPositionX(updateThemeInput.getCameraPositionX())
+                        .cameraPositionY(updateThemeInput.getCameraPositionY())
+                        .cameraPositionZ(updateThemeInput.getCameraPositionZ())
+                        .cameraRotationX(updateThemeInput.getCameraRotationX())
+                        .cameraRotationY(updateThemeInput.getCameraRotationY())
+                        .cameraRotationZ(updateThemeInput.getCameraRotationZ())
+                        .positionX(updateThemeInput.getPositionX())
+                        .positionY(updateThemeInput.getPositionY())
+                        .positionZ(updateThemeInput.getPositionZ())
+                        .rotationX(updateThemeInput.getRotationX())
+                        .rotationY(updateThemeInput.getRotationY())
+                        .rotationZ(updateThemeInput.getRotationZ())
+                        .scaleX(updateThemeInput.getScaleX())
+                        .scaleY(updateThemeInput.getScaleY())
+                        .scaleZ(updateThemeInput.getScaleZ())
+                        .themeObjects(updateThemeInput.getThemeObjects().stream()
+                                .map(updateThemeObjectInput -> ThemeObject.builder()
+                                        .type(updateThemeObjectInput.getType())
+                                        .name(updateThemeObjectInput.getName())
+                                        .positionX(updateThemeObjectInput.getPositionX())
+                                        .positionY(updateThemeObjectInput.getPositionY())
+                                        .positionZ(updateThemeObjectInput.getPositionZ())
+                                        .rotationX(updateThemeObjectInput.getRotationX())
+                                        .rotationY(updateThemeObjectInput.getRotationY())
+                                        .rotationZ(updateThemeObjectInput.getRotationZ())
+                                        .scaleX(updateThemeObjectInput.getScaleX())
+                                        .scaleY(updateThemeObjectInput.getScaleY())
+                                        .scaleZ(updateThemeObjectInput.getScaleZ())
+                                        .companyProductId(updateThemeObjectInput.getCompanyProductId())
+                                        .companyProductName(updateThemeObjectInput.getCompanyProductName())
+                                        .companyProductImageUrl(updateThemeObjectInput.getCompanyProductImageUrl())
+                                        .companyProductTargetUrl(updateThemeObjectInput.getCompanyProductTargetUrl())
+                                        .build())
+                                .collect(Collectors.toList()))
+                        .themeLights(updateThemeInput.getThemeLights().stream()
+                                .map(updateThemeLightInput -> ThemeLight.builder()
+                                        .type(updateThemeLightInput.getType())
+                                        .name(updateThemeLightInput.getName())
+                                        .castShadow(updateThemeLightInput.isCastShadow())
+                                        .angle(updateThemeLightInput.getAngle())
+                                        .color(updateThemeLightInput.getColor())
+                                        .distance(updateThemeLightInput.getDistance())
+                                        .intensity(updateThemeLightInput.getIntensity())
+                                        .spotPenumbra(updateThemeLightInput.getSpotPenumbra())
+                                        .build())
+                                .collect(Collectors.toList()))
+                        .build())
                 .map(themeRepository::save)
                 .map(themeToThemeVOConverter::convert)
                 .map(themeVOToThemeDTOConverter::convert)
