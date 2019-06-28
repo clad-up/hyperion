@@ -183,4 +183,21 @@ public class ThemeService {
                 .orElseThrow();
     }
 
+    /**
+     * Delete theme
+     *
+     * @param id primary key
+     * @return Deleted theme
+     */
+    public ThemeDTO delete(long id) {
+        return themeRepository.findById(id)
+                .map(theme -> {
+                    themeRepository.deleteById(id);
+                    return theme;
+                })
+                .map(themeToThemeVOConverter::convert)
+                .map(themeVOToThemeDTOConverter::convert)
+                .orElseThrow();
+    }
+
 }

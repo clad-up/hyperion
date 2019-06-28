@@ -60,4 +60,15 @@ public class ThemeController {
         return themeService.update(id, updateThemeInput);
     }
 
+    /**
+     * Delete them, objects, and lights
+     *
+     * @param id Theme primary key
+     * @return Deleted theme
+     */
+    @DeleteMapping("/{id}")
+    public @NotNull ThemeDTO delete(@PathVariable long id) {
+        return themeService.delete(id);
+    }
+
 }
