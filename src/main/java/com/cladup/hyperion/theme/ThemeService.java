@@ -3,9 +3,7 @@ package com.cladup.hyperion.theme;
 import com.cladup.hyperion.theme.input.CreateThemeInput;
 import com.cladup.hyperion.theme.input.UpdateThemeInput;
 import com.cladup.hyperion.themelight.ThemeLight;
-import com.cladup.hyperion.themelight.ThemeLightVO;
 import com.cladup.hyperion.themeobject.ThemeObject;
-import com.cladup.hyperion.themeobject.ThemeObjectVO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +57,7 @@ public class ThemeService {
      * @return Persisted theme
      */
     public @NotNull ThemeDTO create(@NotNull CreateThemeInput createThemeInput) {
-        ThemeVO themeVO = ThemeVO.builder()
+        Theme newTheme = Theme.builder()
                 .name(createThemeInput.getName())
                 .description(createThemeInput.getDescription())
                 .cameraPositionX(createThemeInput.getCameraPositionX())
@@ -78,7 +76,7 @@ public class ThemeService {
                 .scaleY(createThemeInput.getScaleY())
                 .scaleZ(createThemeInput.getScaleZ())
                 .themeObjects(createThemeInput.getThemeObjects().stream()
-                        .map(createThemeObjectInput -> ThemeObjectVO.builder()
+                        .map(createThemeObjectInput -> ThemeObject.builder()
                                 .type(createThemeObjectInput.getType())
                                 .name(createThemeObjectInput.getName())
                                 .positionX(createThemeObjectInput.getPositionX())
@@ -97,7 +95,7 @@ public class ThemeService {
                                 .build())
                         .collect(Collectors.toList()))
                 .themeLights(createThemeInput.getThemeLights().stream()
-                        .map(createThemeLightInput -> ThemeLightVO.builder()
+                        .map(createThemeLightInput -> ThemeLight.builder()
                                 .type(createThemeLightInput.getType())
                                 .name(createThemeLightInput.getName())
                                 .castShadow(createThemeLightInput.isCastShadow())
@@ -109,8 +107,7 @@ public class ThemeService {
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
-        return Optional.of(themeVO)
-                .map(themeToThemeVOConverter::revert)
+        return Optional.of(newTheme)
                 .map(themeRepository::save)
                 .map(themeToThemeVOConverter::convert)
                 .map(themeVOToThemeDTOConverter::convert)
@@ -166,6 +163,7 @@ public class ThemeService {
                                 .collect(Collectors.toList()))
                         .themeLights(updateThemeInput.getThemeLights().stream()
                                 .map(updateThemeLightInput -> ThemeLight.builder()
+                                        .id(updateThemeLightInput.getId())
                                         .type(updateThemeLightInput.getType())
                                         .name(updateThemeLightInput.getName())
                                         .castShadow(updateThemeLightInput.isCastShadow())
