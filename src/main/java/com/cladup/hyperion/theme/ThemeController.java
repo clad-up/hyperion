@@ -1,6 +1,8 @@
 package com.cladup.hyperion.theme;
 
+import com.cladup.hyperion.theme.input.CreateThemeInput;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -29,6 +31,16 @@ public class ThemeController {
     @GetMapping("/{id}")
     public @NotNull ThemeDTO getById(@PathVariable long id) {
         return themeService.getById(id);
+    }
+
+    /**
+     * Create theme, objects, and lights
+     * @param createThemeInput Theme create input
+     * @return Created theme
+     */
+    @PostMapping
+    public @NotNull ThemeDTO create(@RequestBody @Validated CreateThemeInput createThemeInput) {
+        return themeService.create(createThemeInput);
     }
 
 }

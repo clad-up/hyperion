@@ -26,4 +26,18 @@ public class ThemeLightToThemeLightVOConverter implements Converter<ThemeLight, 
                 .build();
     }
 
+    public @NotNull ThemeLight revert(@NotNull ThemeLightVO source) {
+        return ThemeLight.builder()
+                .id(source.getId())
+                .type(source.getType())
+                .name(source.getName())
+                .castShadow(source.isCastShadow())
+                .angle(source.getAngle())
+                .color(source.getColor())
+                .distance(source.getDistance())
+                .intensity(source.getIntensity())
+                .spotPenumbra(source.getSpotPenumbra())
+                .build();
+    }
+
 }

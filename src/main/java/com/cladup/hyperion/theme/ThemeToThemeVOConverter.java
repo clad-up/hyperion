@@ -50,4 +50,35 @@ public class ThemeToThemeVOConverter implements Converter<Theme, ThemeVO> {
                 .build();
     }
 
+    public @NotNull Theme revert(@NotNull ThemeVO source) {
+        return Theme.builder()
+                .id(source.getId())
+                .name(source.getName())
+                .description(source.getDescription())
+                .cameraPositionX(source.getCameraPositionX())
+                .cameraPositionY(source.getCameraPositionY())
+                .cameraPositionZ(source.getCameraPositionZ())
+                .cameraRotationX(source.getCameraRotationX())
+                .cameraRotationY(source.getCameraRotationY())
+                .cameraRotationZ(source.getCameraRotationZ())
+                .positionX(source.getPositionX())
+                .positionY(source.getPositionY())
+                .positionZ(source.getPositionZ())
+                .rotationX(source.getRotationX())
+                .rotationY(source.getRotationY())
+                .rotationZ(source.getRotationZ())
+                .scaleX(source.getScaleX())
+                .scaleY(source.getScaleY())
+                .scaleZ(source.getScaleZ())
+                .themeObjects(source.getThemeObjects()
+                        .stream()
+                        .map(themeObjectToThemeObjectVOConverter::revert)
+                        .collect(Collectors.toList()))
+                .themeLights(source.getThemeLights()
+                        .stream()
+                        .map(themeLightToThemeLightVOConverter::revert)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
 }
