@@ -2,6 +2,8 @@ package com.cladup.hyperion.theme;
 
 import com.cladup.hyperion.theme.input.CreateThemeInput;
 import com.cladup.hyperion.theme.input.UpdateThemeInput;
+import com.cladup.hyperion.theme.input.UpdateThemeLightInput;
+import com.cladup.hyperion.theme.input.UpdateThemeObjectInput;
 import com.cladup.hyperion.themelight.ThemeLight;
 import com.cladup.hyperion.themeobject.ThemeObject;
 import lombok.AllArgsConstructor;
@@ -142,37 +144,54 @@ public class ThemeService {
                         .scaleX(updateThemeInput.getScaleX())
                         .scaleY(updateThemeInput.getScaleY())
                         .scaleZ(updateThemeInput.getScaleZ())
-                        .themeObjects(updateThemeInput.getThemeObjects().stream()
-                                .map(updateThemeObjectInput -> ThemeObject.builder()
-                                        .type(updateThemeObjectInput.getType())
-                                        .name(updateThemeObjectInput.getName())
-                                        .positionX(updateThemeObjectInput.getPositionX())
-                                        .positionY(updateThemeObjectInput.getPositionY())
-                                        .positionZ(updateThemeObjectInput.getPositionZ())
-                                        .rotationX(updateThemeObjectInput.getRotationX())
-                                        .rotationY(updateThemeObjectInput.getRotationY())
-                                        .rotationZ(updateThemeObjectInput.getRotationZ())
-                                        .scaleX(updateThemeObjectInput.getScaleX())
-                                        .scaleY(updateThemeObjectInput.getScaleY())
-                                        .scaleZ(updateThemeObjectInput.getScaleZ())
-                                        .companyProductId(updateThemeObjectInput.getCompanyProductId())
-                                        .companyProductName(updateThemeObjectInput.getCompanyProductName())
-                                        .companyProductImageUrl(updateThemeObjectInput.getCompanyProductImageUrl())
-                                        .companyProductTargetUrl(updateThemeObjectInput.getCompanyProductTargetUrl())
-                                        .build())
+                        .themeObjects(theme.getThemeObjects().stream()
+                                .map(themeObject -> {
+                                    UpdateThemeObjectInput updatingObject = updateThemeInput
+                                            .getThemeObjects()
+                                            .stream()
+                                            .filter(updateThemeObjectInput -> updateThemeObjectInput.getId() ==
+                                                    themeObject.getId())
+                                            .findFirst()
+                                            .orElseThrow();
+                                    return themeObject.toBuilder()
+                                            .name(updatingObject.getName())
+                                            .type(updatingObject.getType())
+                                            .positionX(updatingObject.getPositionX())
+                                            .positionY(updatingObject.getPositionY())
+                                            .positionZ(updatingObject.getPositionZ())
+                                            .rotationX(updatingObject.getPositionX())
+                                            .rotationY(updatingObject.getPositionY())
+                                            .rotationZ(updatingObject.getPositionZ())
+                                            .scaleX(updatingObject.getScaleX())
+                                            .scaleY(updatingObject.getScaleY())
+                                            .scaleZ(updatingObject.getScaleZ())
+                                            .companyProductId(updatingObject.getCompanyProductId())
+                                            .companyProductName(updatingObject.getCompanyProductName())
+                                            .companyProductImageUrl(updatingObject.getCompanyProductImageUrl())
+                                            .companyProductTargetUrl(updatingObject.getCompanyProductTargetUrl())
+                                            .build();
+                                })
                                 .collect(Collectors.toList()))
-                        .themeLights(updateThemeInput.getThemeLights().stream()
-                                .map(updateThemeLightInput -> ThemeLight.builder()
-                                        .id(updateThemeLightInput.getId())
-                                        .type(updateThemeLightInput.getType())
-                                        .name(updateThemeLightInput.getName())
-                                        .castShadow(updateThemeLightInput.isCastShadow())
-                                        .angle(updateThemeLightInput.getAngle())
-                                        .color(updateThemeLightInput.getColor())
-                                        .distance(updateThemeLightInput.getDistance())
-                                        .intensity(updateThemeLightInput.getIntensity())
-                                        .spotPenumbra(updateThemeLightInput.getSpotPenumbra())
-                                        .build())
+                        .themeLights(theme.getThemeLights().stream()
+                                .map(themeLight -> {
+                                    UpdateThemeLightInput updatingLight = updateThemeInput
+                                            .getThemeLights()
+                                            .stream()
+                                            .filter(updateThemeLightInput -> updateThemeLightInput.getId() ==
+                                                    themeLight.getId())
+                                            .findFirst()
+                                            .orElseThrow();
+                                    return themeLight.toBuilder()
+                                            .type(updatingLight.getType())
+                                            .name(updatingLight.getName())
+                                            .castShadow(updatingLight.isCastShadow())
+                                            .angle(updatingLight.getAngle())
+                                            .color(updatingLight.getColor())
+                                            .distance(updatingLight.getDistance())
+                                            .intensity(updatingLight.getIntensity())
+                                            .spotPenumbra(updatingLight.getSpotPenumbra())
+                                            .build();
+                                })
                                 .collect(Collectors.toList()))
                         .build())
                 .map(themeRepository::save)
