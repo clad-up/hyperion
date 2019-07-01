@@ -60,4 +60,15 @@ public class CampaignController {
         return campaignService.update(id, updateCampaignInput);
     }
 
+    /**
+     * Delete campaign
+     *
+     * @param id Primary key
+     * @return Deleted campaign
+     */
+    @DeleteMapping("/{id}")
+    public @NotNull CampaignDTO delete(@PathVariable long id) {
+        return campaignService.delete(id);
+    }
+
 }

@@ -200,4 +200,21 @@ public class CampaignService {
                 .orElseThrow();
     }
 
+    /**
+     * Delete campaign
+     *
+     * @param id Primary key
+     * @return Deleted campaign
+     */
+    public CampaignDTO delete(long id) {
+        return campaignRepository.findById(id)
+                .map(theme -> {
+                    campaignRepository.deleteById(id);
+                    return theme;
+                })
+                .map(campaignToCampaignVOConverter::convert)
+                .map(campaignVOToCampaignDTOConverter::convert)
+                .orElseThrow();
+    }
+
 }
