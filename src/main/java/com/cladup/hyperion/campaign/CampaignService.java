@@ -1,6 +1,9 @@
 package com.cladup.hyperion.campaign;
 
 import com.cladup.hyperion.campaign.input.CreateCampaignInput;
+import com.cladup.hyperion.campaign.input.UpdateCampaignInput;
+import com.cladup.hyperion.campaign.input.UpdateCampaignLightInput;
+import com.cladup.hyperion.campaign.input.UpdateCampaignObjectInput;
 import com.cladup.hyperion.campaignlight.CampaignLight;
 import com.cladup.hyperion.campaignobject.CampaignObject;
 import lombok.AllArgsConstructor;
@@ -45,6 +48,12 @@ public class CampaignService {
                 .orElseThrow();
     }
 
+    /**
+     * Create campaign
+     *
+     * @param createCampaignInput Input data for campaign creation
+     * @return Created campaign
+     */
     public @NotNull CampaignDTO create(@NotNull CreateCampaignInput createCampaignInput) {
         Campaign newCampaign = Campaign.builder()
                 .themeId(createCampaignInput.getThemeId())
@@ -101,6 +110,91 @@ public class CampaignService {
                 .build();
         return Optional.of(newCampaign)
                 .map(campaignRepository::save)
+                .map(campaignToCampaignVOConverter::convert)
+                .map(campaignVOToCampaignDTOConverter::convert)
+                .orElseThrow();
+    }
+
+    /**
+     * Update campaign
+     *
+     * @param updateCampaignInput Input for campaign update
+     * @return Updated campaign
+     */
+    public @NotNull CampaignDTO update(long id, @NotNull UpdateCampaignInput updateCampaignInput) {
+        return campaignRepository.findById(id)
+                .filter(campaign -> campaign.getId() == updateCampaignInput.getId())
+                .map(campaign -> campaign.toBuilder()
+                        .themeId(updateCampaignInput.getThemeId())
+                        .name(updateCampaignInput.getName())
+                        .description(updateCampaignInput.getDescription())
+                        .cameraPositionX(updateCampaignInput.getCameraPositionX())
+                        .cameraPositionY(updateCampaignInput.getCameraPositionY())
+                        .cameraPositionZ(updateCampaignInput.getCameraPositionZ())
+                        .cameraRotationX(updateCampaignInput.getCameraRotationX())
+                        .cameraRotationY(updateCampaignInput.getCameraRotationY())
+                        .cameraRotationZ(updateCampaignInput.getCameraRotationZ())
+                        .positionX(updateCampaignInput.getPositionX())
+                        .positionY(updateCampaignInput.getPositionY())
+                        .positionZ(updateCampaignInput.getPositionZ())
+                        .rotationX(updateCampaignInput.getRotationX())
+                        .rotationY(updateCampaignInput.getRotationY())
+                        .rotationZ(updateCampaignInput.getRotationZ())
+                        .scaleX(updateCampaignInput.getScaleX())
+                        .scaleY(updateCampaignInput.getScaleY())
+                        .scaleZ(updateCampaignInput.getScaleZ())
+                        .campaignObjects(campaign.getCampaignObjects().stream()
+                                .map(campaignObject -> {
+                                    UpdateCampaignObjectInput updatingObject = updateCampaignInput
+                                            .getCampaignObjects()
+                                            .stream()
+                                            .filter(updateThemeObjectInput -> updateThemeObjectInput.getId() ==
+                                                    campaignObject.getId())
+                                            .findFirst()
+                                            .orElseThrow();
+                                    return campaignObject.toBuilder()
+                                            .themeObjectId(updatingObject.getThemeObjectId())
+                                            .name(updatingObject.getName())
+                                            .type(updatingObject.getType())
+                                            .positionX(updatingObject.getPositionX())
+                                            .positionY(updatingObject.getPositionY())
+                                            .positionZ(updatingObject.getPositionZ())
+                                            .rotationX(updatingObject.getPositionX())
+                                            .rotationY(updatingObject.getPositionY())
+                                            .rotationZ(updatingObject.getPositionZ())
+                                            .scaleX(updatingObject.getScaleX())
+                                            .scaleY(updatingObject.getScaleY())
+                                            .scaleZ(updatingObject.getScaleZ())
+                                            .companyProductId(updatingObject.getCompanyProductId())
+                                            .companyProductName(updatingObject.getCompanyProductName())
+                                            .companyProductImageUrl(updatingObject.getCompanyProductImageUrl())
+                                            .companyProductTargetUrl(updatingObject.getCompanyProductTargetUrl())
+                                            .build();
+                                })
+                                .collect(Collectors.toList()))
+                        .campaignLights(campaign.getCampaignLights().stream()
+                                .map(campaignLight -> {
+                                    UpdateCampaignLightInput updatingLight = updateCampaignInput
+                                            .getCampaignLights()
+                                            .stream()
+                                            .filter(updateThemeLightInput -> updateThemeLightInput.getId() ==
+                                                    campaignLight.getId())
+                                            .findFirst()
+                                            .orElseThrow();
+                                    return campaignLight.toBuilder()
+                                            .themeLightId(updatingLight.getThemeLightId())
+                                            .type(updatingLight.getType())
+                                            .name(updatingLight.getName())
+                                            .castShadow(updatingLight.isCastShadow())
+                                            .angle(updatingLight.getAngle())
+                                            .color(updatingLight.getColor())
+                                            .distance(updatingLight.getDistance())
+                                            .intensity(updatingLight.getIntensity())
+                                            .spotPenumbra(updatingLight.getSpotPenumbra())
+                                            .build();
+                                })
+                                .collect(Collectors.toList()))
+                        .build())
                 .map(campaignToCampaignVOConverter::convert)
                 .map(campaignVOToCampaignDTOConverter::convert)
                 .orElseThrow();

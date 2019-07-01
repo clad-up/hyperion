@@ -1,7 +1,9 @@
 package com.cladup.hyperion.campaign;
 
 import com.cladup.hyperion.campaign.input.CreateCampaignInput;
+import com.cladup.hyperion.campaign.input.UpdateCampaignInput;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -41,8 +43,21 @@ public class CampaignController {
      * @return Created campaign
      */
     @PostMapping
-    public @NotNull CampaignDTO create(@NotNull CreateCampaignInput createCampaignInput) {
+    public @NotNull CampaignDTO create(@RequestBody @Validated CreateCampaignInput createCampaignInput) {
         return campaignService.create(createCampaignInput);
+    }
+
+    /**
+     * Update campaign
+     *
+     * @param id Primary key
+     * @param updateCampaignInput Input data for campaign update
+     * @return Updated campaign
+     */
+    @PutMapping("/{id}")
+    public @NotNull CampaignDTO update(@PathVariable long id,
+                                       @RequestBody @Validated UpdateCampaignInput updateCampaignInput) {
+        return campaignService.update(id, updateCampaignInput);
     }
 
 }
