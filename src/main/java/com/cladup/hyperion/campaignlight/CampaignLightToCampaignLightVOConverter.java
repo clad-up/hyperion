@@ -8,6 +8,7 @@ public class CampaignLightToCampaignLightVOConverter implements Converter<Campai
     public CampaignLightVO convert(CampaignLight source) {
         return CampaignLightVO.builder()
                 .id(source.getId())
+                .themeLightId(source.getThemeLightId())
                 .type(source.getType())
                 .name(source.getName())
                 .castShadow(source.isCastShadow())

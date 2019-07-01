@@ -10,6 +10,7 @@ public class CampaignLightVOToCampaignLightDTOConverter implements Converter<Cam
     public CampaignLightDTO convert(CampaignLightVO source) {
         return CampaignLightDTO.builder()
                 .id(source.getId())
+                .themeLightId(source.getThemeLightId())
                 .type(source.getType())
                 .name(source.getName())
                 .castShadow(source.isCastShadow())

@@ -18,6 +18,7 @@ public class CampaignToCampaignVOConverter implements Converter<Campaign, Campai
     public CampaignVO convert(Campaign source) {
         return CampaignVO.builder()
                 .id(source.getId())
+                .themeId(source.getThemeId())
                 .name(source.getName())
                 .description(source.getDescription())
                 .cameraPositionX(source.getCameraPositionX())

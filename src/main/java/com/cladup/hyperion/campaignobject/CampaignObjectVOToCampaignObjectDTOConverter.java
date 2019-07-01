@@ -10,6 +10,7 @@ public class CampaignObjectVOToCampaignObjectDTOConverter implements Converter<C
     public CampaignObjectDTO convert(CampaignObjectVO source) {
         return CampaignObjectDTO.builder()
                 .id(source.getId())
+                .themeObjectId(source.getThemeObjectId())
                 .name(source.getName())
                 .type(source.getType())
                 .positionX(source.getPositionX())

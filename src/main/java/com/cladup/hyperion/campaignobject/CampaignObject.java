@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -21,6 +22,8 @@ public class CampaignObject {
     @Id
     @GeneratedValue
     private long id;
+    @Min(0)
+    private long themeObjectId;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)

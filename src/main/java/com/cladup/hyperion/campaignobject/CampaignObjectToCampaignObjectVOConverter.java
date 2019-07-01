@@ -8,6 +8,7 @@ public class CampaignObjectToCampaignObjectVOConverter implements Converter<Camp
     public CampaignObjectVO convert(CampaignObject source) {
         return CampaignObjectVO.builder()
                 .id(source.getId())
+                .themeObjectId(source.getThemeObjectId())
                 .name(source.getName())
                 .type(source.getType())
                 .positionX(source.getPositionX())

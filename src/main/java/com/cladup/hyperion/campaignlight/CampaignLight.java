@@ -23,6 +23,8 @@ public class CampaignLight {
     @Id
     @GeneratedValue
     private long id;
+    @Min(0)
+    private long themeLightId;
     @Column(nullable = false)
     private String type;
     @Column(nullable = false)

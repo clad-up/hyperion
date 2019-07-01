@@ -18,6 +18,7 @@ public class CampaignVOToCampaignDTOConverter implements Converter<CampaignVO, C
     public CampaignDTO convert(CampaignVO source) {
         return CampaignDTO.builder()
                 .id(source.getId())
+                .themeId(source.getThemeId())
                 .name(source.getName())
                 .description(source.getDescription())
                 .cameraPositionX(source.getCameraPositionX())

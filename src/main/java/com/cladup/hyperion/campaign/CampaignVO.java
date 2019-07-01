@@ -5,6 +5,7 @@ import com.cladup.hyperion.campaignobject.CampaignObjectVO;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -14,6 +15,8 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class CampaignVO {
     private final long id;
+    @Min(0)
+    private final long themeId;
     @NotBlank
     private final String name;
     @NotNull

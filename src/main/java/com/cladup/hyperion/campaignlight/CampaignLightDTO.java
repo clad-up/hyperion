@@ -3,6 +3,7 @@ package com.cladup.hyperion.campaignlight;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -11,6 +12,8 @@ import java.math.BigDecimal;
 @Builder(toBuilder = true)
 public class CampaignLightDTO {
     private final long id;
+    @Min(0)
+    private final long themeLightId;
     @NotBlank
     private final String type;
     @NotBlank
